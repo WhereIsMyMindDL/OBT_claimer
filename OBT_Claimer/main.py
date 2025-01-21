@@ -50,7 +50,7 @@ class Worker:
 
             latest_block = await self.w3.eth.get_block("latest")
             base_fee_per_gas = latest_block["baseFeePerGas"]
-            priority_fee = self.w3.to_wei(2, 'gwei')
+            priority_fee = self.w3.to_wei(0.5, 'gwei')
             max_fee_per_gas = base_fee_per_gas + priority_fee
 
             tx_data = {
@@ -72,9 +72,9 @@ class Worker:
 
             signed_txn = self.w3.eth.account.sign_transaction(tx_data, self.private_key)
             tx_hash = await self.w3.eth.send_raw_transaction(signed_txn.raw_transaction)
-            logger.info(f'{self.id} | send txs...')
+            logger.info(f'#{self.id} | send txs...')
             tx_hash = self.w3.to_hex(tx_hash)
-            await asyncio.sleep(3)
+            await asyncio.sleep(6)
 
             receipt = await self.w3.eth.get_transaction_receipt(tx_hash)
             if receipt['status'] == 1:
